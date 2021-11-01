@@ -1,0 +1,75 @@
+/* You can add global styles to this file, and also import other style files */
+:root{
+ --assweb-font-family:'Roboto', 'Arial', sans-serif;
+}
+
+@font-face {
+    font-family: 'assweb-font';
+    src: url('data:font/woff2;charset=utf-8;base64,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') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
+body{
+ font-family:var(--assweb-font-family);
+ overflow:hidden;
+ margin:auto;
+}
+
+.assweb-font{
+ font-family:"assweb-font";
+ color:#fff;
+ font-size:18px;
+}
+
+div[data-chatWrapr="container"]
+{
+ width:40%;
+ display:flex;
+ flex-direction:column;
+}
+
+
+/*.ncom.js style*/
+.ncomwrp
+{
+  background:rgba(var(--us-black-rgb),.3);
+}
+.ncomcrosspath
+{
+ fill: rgba(var(--us-blue-rgb),.8);
+}
+.ncombw
+{
+ background:rgb(var(--us-ded-rgb));
+ color:rgba(var(--us-dark-rgb),.8);
+}
+.btn-accept, .btn-cancel
+{
+ padding:5px 8px;
+ border-radius:5px;
+ font-size: 16px;
+ border:0;
+ cursor:pointer;
+ box-shadow:0 0 2px rgba(0,0,0,60%);
+}
+.btn-accept{
+ background-color:var(--us-blue-color);
+ color:var(--us-white-color);
+}
+.btn-cancel
+{
+ background-color:var(--us-c6c-color);
+ color:rgba(var(--us-dark-rgb),.7);
+}
+/*.ncom.js style ended*/
+
+@media only screen and (max-width:767px)/*small screen*/
+{
+ div[data-chatWrapr="container"]
+ {
+  width:95%;
+ }
+}
+

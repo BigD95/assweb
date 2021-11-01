@@ -1,0 +1,112 @@
+:host{
+ display:flex;
+ flex-direction: column;
+}
+
+:host div.msgform{
+ max-width:95%;
+}
+
+div.msgform:not([data-float="system"]){
+ box-shadow:0 0 2px rgba(0,0,0,60%);
+ border-radius:6px;
+ background:#dedede;
+}
+
+div.msgform{
+ display:flex;
+ flex-direction:row;
+ flex-wrap:nowrap;
+}
+
+div.avatar{
+ display:flex;
+ flex-shrink:0;
+ flex-grow:0;
+}
+
+div.avatar .icon{
+ width:40px;
+ height:40px;
+}
+
+div.body{
+ margin-left:10px;
+ display:flex;
+ flex-direction: column;
+ flex-grow:1;
+ overflow: hidden;
+}
+
+div[title]{
+ display:flex;
+ align-self: flex-end;
+ font-weight: bold;
+ flex-direction: column;
+ cursor: pointer;
+}
+
+div[title] .title-tooltip{
+ color: gray;
+ font-weight:200;
+}
+
+div.body .status{
+ display: flex;
+ flex-direction: column;
+ align-items: flex-start;
+ color: #16a05d;
+}
+
+div.body .status .state{
+ display: flex;
+ align-items: center;
+ justify-content:center;
+}
+
+div[data-float="_ASSIST_"]{
+ align-self: flex-end;
+}
+
+div[data-float="_CUSTOMER_"]{
+ align-self: flex-start;
+}
+
+div[data-float="system"]{
+ margin-left: auto;
+ margin-right: auto;
+}
+
+.filename{
+ font-weight: bold;
+}
+
+.filesize{
+ font-weight:400;
+}
+
+div.filetitle{
+ margin: 2px 0;
+}
+
+pre{
+ white-space: pre-line;
+ word-wrap: break-word;
+ margin:0;
+ font-family:var(--assweb-font-family);
+}
+
+/*especially for ASSIST MSG*/
+
+:host[data-from="_ASSIST_"] div.msgform{
+ flex-direction: row-reverse;
+}
+
+:host[data-from="_ASSIST_"] div.body{
+ margin-left:0;
+ margin-right:15px;
+}
+
+:host[data-from="_ASSIST_"] div[title]{
+ align-self: flex-start;
+}

@@ -1,0 +1,51 @@
+<!--message-->
+<div *ngIf="got.NAT!='FILE'" [attr.data-float]="got.FROM||'system'" class="msgform w-adjust box-margin10_0 box-padding10 clearfix" [id]="'message'+got.NO">
+  <!---->       
+  <div *ngIf="got.NAT!='BASE'" class="avatar">
+    <div *ngIf="got.FROM=='_CUSTOMER_'" [innerHTML]="JS_STRING.JUSER" class="icon us-green-area radius50p box-flex-center flex-alignItem-center"></div>
+    <div *ngIf="got.FROM=='_ASSIST_'" [innerHTML]="JS_STRING.JND" class="icon us-blue-area radius50p box-flex-center flex-alignItem-center"></div>
+  </div>
+  <!---->       
+  <div class="body text-in-us-dark">
+    <div *ngIf="got.NAT=='MSG'" [title]="String(got.MSG[1])"><span (click)="titleTool=!titleTool" [innerHTML]="String(got.MSG[0])"></span><span [hidden]="titleTool" class="title-tooltip" [innerHTML]="String(got.MSG[1])"></span></div>
+    <div class="msg clearfix">
+      <pre *ngIf="got.NAT=='MSG'" [innerHTML]="String(got.MSG[2])"></pre>
+      <pre *ngIf="got.NAT=='BASE'" [innerHTML]="got.MSG"></pre>
+    </div>
+    <!--status-->
+    <div *ngIf="got.role && got.role==='sendMsg'" class="status text-size10 clearfix">
+      <i *ngIf="!messageSent" [class]="syncing"></i>
+      <i *ngIf="messageSent" [class]="synced"></i>
+    </div>
+  </div>
+<!---->
+</div>
+
+<!--file-->
+<div *ngIf="got.NAT=='FILE'" [attr.data-float]="got.FROM" class="msgform w-adjust box-margin10_0 box-padding10 clearfix" [id]="'message'+got.NO">
+  <!---->      
+  <div *ngIf="got.NAT!='BASE'" class="avatar">
+    <div *ngIf="got.FROM=='_CUSTOMER_'" [innerHTML]="JS_STRING.JUSER" class="icon us-green-area radius50p box-flex-center flex-alignItem-center"></div>
+    <div *ngIf="got.FROM=='_ASSIST_'" [innerHTML]="JS_STRING.JND" class="icon us-blue-area radius50p box-flex-center flex-alignItem-center"></div>
+  </div>
+  <!---->     
+  <div class="body text-in-us-dark">
+    <div class="filetitle" [title]="String(got.MSG[1])"><span (click)="titleTool=!titleTool" [innerHTML]="String(got.MSG[0])"></span><span [hidden]="titleTool" class="title-tooltip" [innerHTML]="String(got.MSG[1])"></span></div>
+    <div class="msg clearfix">
+      <pre [innerHTML]="String(got.MSG[2])" class="filename clearfix"></pre>
+      <pre [innerHTML]="String(got.MSG[3])" class="filesize clearfix"></pre>
+      <pre *ngIf="got.MSG[7]" class="clearfix text-size12">
+        <a class="its-link us-link-oblue inline-flex" rel="nofollow" [href]="JS_STRING.SHD+'?file='+String(got.MSG[5])+'&hh='+String(got.MSG[7])+'&name='+String(got.MSG[6])" target="_blank">{{JS_STRING.FILE_CLICK_TEXT}}</a>
+      </pre>
+    </div>
+    <!--status-->
+    <div *ngIf="got.role && got.role==='sendFile'" class="status text-size10 clearfix">
+      <i *ngIf="!messageSent" [class]="syncing"></i>
+      <i *ngIf="messageSent" [class]="synced"></i>
+    </div>
+    <div *ngIf="got.role && got.role==='sendFile' && !messageSent" class="status text-size10 clearfix">
+      <span [innerHTML]="fileLoaded"></span>
+    </div>
+  </div>
+ <!---->
+</div>

@@ -1,0 +1,28 @@
+<div *ngIf="readyToAccess" [style.height.px]="appInnerHtml" data-el="grid" class="box-grid text-size12">
+  <!---->
+   <div class="chat-head take-width us-c6c-area text-in-us-dark center-text no-text-selection"> 
+    <div class="take-width box-flex-space-between text-in-us-dark">
+      <div [attr.data-name]="title" class="box-padding5 setcontent box-margin10 text-bold"></div>
+      <div role="button" *ngIf="Data.supportEnabled==='VALIDATED'" #exit [attr.data-name]="JS_STRING.EXIT_CHAT" class="box-padding5 setcontent box-margin10 cursor-pointer pos-relative radius5 center-text us-ded-area exitbut" (click)="endChat($event)"></div>
+    </div>
+    <div [hidden]="statusTool" #state class="take-width center-text pos-absolute us-ded-area text-in-us-dark uzindex1 box-padding5"></div> 
+   </div>
+  <!---->
+   <div #blueThumb msgWrapper class="take-width y-scroll custom-scrll blue-thumb">
+     <div #chatWrapr data-chatWrapr="container" class="pos-relative c-hoz">
+       <msgform *ngFor="let bmsg of MSGSX; let lastitr=last; trackBy: trackByMessage" [got]="bmsg" [gotFormData]="formDataToExternal||undefined" (clearFormData)="clearFormdata()" [attr.data-nat]="bmsg.NAT" [attr.data-from]="bmsg.FROM||'system'" (onCreate)="checkLast(lastitr)"></msgform>
+     </div>
+   </div>
+ <!---->
+   <div class="chat-foot take-width box-padding5 us-c6c-area">
+      <form [formGroup]="chatForm" #msgform enctype="multipart/form-data" class="box100_100p box-flex-center">
+       <input #fileField fileapplet (onFileReady)="inChatFile($event)" #a1531 id="a45ed45e" name="v4dc1e8" type="file" hidden/>
+       <div class="boxW70p boxH50px us-white-area us-thin-sixed-border box-padding5 radius5">
+        <textarea dTarea #txtarea class="text-in-us-dark text-size14 no-border no-resize" name="ds4dw5dw" placeholder="Message..."></textarea>
+       </div>
+       <label (click)="sendMessage($event)" *ngIf="Data.supportEnabled==='VALIDATED'" #sendMsg role="button" class="inline-flex flex-alignItem-center boxH50px no-border cursor-pointer us-blue-area box-padding2_8 box-margin0_5 radius5" data-role="sendMsg"><span class="assweb-font send-message">&#xe96d;</span></label>
+       <label *ngIf="Data.supportEnabled==='VALIDATED'" #sendFile role="button" for="a45ed45e" class="inline-flex flex-alignItem-center boxH50px no-border cursor-pointer us-blue-area box-margin0_5 box-padding5 radius5"><span class="assweb-font senf-file">&#xe900;</span></label>
+      </form>
+   </div>  
+ <!---->
+</div>
