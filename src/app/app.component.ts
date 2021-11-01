@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   visitorName?:string;
   
   //check that page is auth.. from domain
-  readyToAccess:boolean=this.Data.hasOwnProperty('pageSupport') && this.Data.pageSupport==='assistance.noud-incorporate.com';
+  readyToAccess:boolean=this.Data.hasOwnProperty('pageSupport') && this.Data.pageSupport==='your_domain';
 
   visibilitychange:string ="visibilitychange"||"msvisibilitychange"||"webkitvisibilitychange";
   hidden:string ="hidden"||"msHidden"||"webkitHidden";
