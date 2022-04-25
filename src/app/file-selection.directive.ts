@@ -1,6 +1,6 @@
 import { Directive, Input, Output, EventEmitter, ElementRef, HostListener, Injectable } from '@angular/core';
 
-import ncom from './ncom';
+import { ncom } from './ncom';
 
 @Directive({
   selector: '[fileapplet]'
@@ -24,7 +24,7 @@ export class FileSelectionDirective {
     const file = this.el.nativeElement.files[0];
     const reader = new FileReader();
    //===
-    if(file.size>this.fileMaxSize) 
+    if(file.size>this.fileMaxSize)
     {
      const del=new ncom({title:this.JS_STRING.FILE_UP_ABORTED,content:this.JS_STRING.FILE_SIZE_EXC,closeIcon:!0});
      return void 0;
@@ -35,7 +35,7 @@ export class FileSelectionDirective {
        this.onFileReady.emit(file);
     };
 
-    
+
   }
 
 }

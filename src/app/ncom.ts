@@ -21,14 +21,14 @@ const resizeDecorator=(target?:Object,propertyKey?:string,descriptor?:PropertyDe
   return descriptor;
 }
 
-interface ncomButton {
+export interface ncomButton {
   hide?: boolean;
   class?: string;
   text?: string | HTMLElement | Node | Object | any;
-  action: (...args:any[]) => {};
+  action: (...args:any[]) => void | any;
 }
 
-interface ncomArg  {
+export interface ncomArg  {
   closeIcon?: boolean;
   ctrlOpen?: boolean;
   timer?: string;
@@ -36,15 +36,15 @@ interface ncomArg  {
   content?: string | HTMLElement | Node | Object | any;
   icon?: string;
   buttons?: Record<string|any,ncomButton>;
-  onContentReady?: (...args:any[]) => {};
-  onOpenBefore?: (...args:any[]) => {};
-  onOpen?: (...args:any[]) => {};
-  onAction?: (...args:any[]) => {};
-  onClose?: (...args:any[]) => {};
-  onDestroy?: (...args:any[]) => {};
+  onContentReady?: (...args:any[]) => void | any;
+  onOpenBefore?: (...args:any[]) => void | any;
+  onOpen?: (...args:any[]) => void | any;
+  onAction?: (...args:any[]) => void | any;
+  onClose?: (...args:any[]) => void | any;
+  onDestroy?: (...args:any[]) => void | any;
 }
 
-class ncom {
+export class ncom {
   #cross?: any;
   #closer?: any;
   #icon?: any;
@@ -61,7 +61,7 @@ class ncom {
   #timerInterval?: any;
 
    constructor(public arg: ncomArg) {
-
+    
     if (typeof this.arg !== 'object') return this;
     this.arg.title = this.arg.title || '';
     this.arg.content = this.arg.content || '';

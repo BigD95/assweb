@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, Input, HostListener, Injectable, ElementRef} from '@angular/core';
 
-import ncom from './ncom';
+import { ncom, ncomArg, ncomButton } from './ncom';
 
 import { AwreqService } from './awreq.service';
 
@@ -30,13 +30,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild("state") state?: ElementRef;
   @ViewChild("fileField") fileField?: ElementRef;
   @ViewChild("a1531") a1531?: ElementRef;
-  
+
   //visitor type
   visitorPublic?:boolean;
   visitorAgent?:boolean;
 
   visitorName?:string;
-  
+
   //check that page is auth.. from domain
   readyToAccess:boolean=this.Data.hasOwnProperty('pageSupport') && this.Data.pageSupport==='your_domain';
 
@@ -58,7 +58,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   statusTool?:boolean=true;
 
   appInnerHtml?:number;
-  
+
 
   constructor(public assweb:ElementRef, private AwreqService: AwreqService, private formBuilder: FormBuilder){
    //app height
@@ -74,7 +74,7 @@ export class AppComponent implements OnInit, AfterViewInit {
    this.MSGSX=Object(window).APPCACHE;
    //
    if(this.readyToAccess && (this.visitorPublic && this.Data.supportEnabled==="NOT_VALIDATED" && this.Data.supportCRED==="CRED_OFF"))
-   {  
+   {
       let app=this;
       let del0=new ncom({
       ctrlOpen:!1,
@@ -100,15 +100,15 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.#pushnot();
     this.#getMsgs();
    }
-    
+
   }
 
-  ngOnInit(): void {  
+  ngOnInit(): void {
 
   }
 
   ngOnDestroy(): void{
-   
+
   }
 
   ngAfterViewInit(): void{
@@ -174,7 +174,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 }
               });
             }
-            handling();    
+            handling();
           },
           buttons:{
             exit_attempt:{
@@ -204,7 +204,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   #chatEvt(o:any):void{
    const $o=Array.from(o);
    if(($o[1]==this.visitorName)) return void 0;
-   
+
    if($o[0]=="cls"){
     this.statusTool=true;
     Object(this.state).nativeElement.innerHTML="";
@@ -224,7 +224,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             if(e.hasOwnProperty("mg")){
 
                if(Object.entries(e.mg)){
-              
+
                   if(Array.from(e.mg).length) {
                     let $w=e.mg;
                     $w=$w.map((e:any)=>{if(e.FROM==this.visitorName) return undefined; else return e;});
@@ -232,7 +232,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                     this.MSGSX=Array.from(this.MSGSX).concat(Array.from($w));
                   }
 
-                if(Object(window).Notification && Object(window).Notification.permission === "granted") 
+                if(Object(window).Notification && Object(window).Notification.permission === "granted")
                 {
                   const $Arr=Array.from(e.mg);
                   const $last=Object($Arr[Math.abs($Arr.length-1)]);
@@ -258,7 +258,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           }
         });
       };
-     
+
       $rollit();
   }
 
@@ -278,7 +278,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               `${Object(this.txtarea).nativeElement.value}`
           ],
           "role":"sendMsg"
-      }; 
+      };
 
     this.MSGSX=this.MSGSX.concat([$message]);
     Object(this.txtarea).nativeElement.value="";
@@ -295,7 +295,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       error:(t:any)=>{
         const del=new ncom({title:`${t.name}:${t.statusText}`,content:this.JS_STRING.CHAT_ERROR,closeIcon:!0});
       }
-    }); 
+    });
   }
 
 
@@ -319,7 +319,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               ""
           ],
           "role":"sendFile"
-      }; 
+      };
 
     this.MSGSX=this.MSGSX.concat([$message]);
   }
@@ -327,7 +327,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   twoDigitTime(part:number):string{
    return String('0'+(part)).slice(-2);
   }
-  
+
   @HostListener('window:resize')
   returnInnerHeight():any{
     this.appInnerHtml=Object(window).innerHeight;
