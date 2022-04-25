@@ -8,8 +8,6 @@
  * Licensed Free
  */
 
-import * as jQuery from 'jquery';
-
 const resizeDecorator=(target?:Object,propertyKey?:string,descriptor?:PropertyDescriptor)=>{
   const original= Object(descriptor).value;
   Object(descriptor).value=function(...args:any){
@@ -23,7 +21,30 @@ const resizeDecorator=(target?:Object,propertyKey?:string,descriptor?:PropertyDe
   return descriptor;
 }
 
-export default class ncom {
+interface ncomButton {
+  hide?: boolean;
+  class?: string;
+  text?: string | HTMLElement | Node | Object | any;
+  action: (...args:any[]) => {};
+}
+
+interface ncomArg  {
+  closeIcon?: boolean;
+  ctrlOpen?: boolean;
+  timer?: string;
+  title?: string;
+  content?: string | HTMLElement | Node | Object | any;
+  icon?: string;
+  buttons?: Record<string|any,ncomButton>;
+  onContentReady?: (...args:any[]) => {};
+  onOpenBefore?: (...args:any[]) => {};
+  onOpen?: (...args:any[]) => {};
+  onAction?: (...args:any[]) => {};
+  onClose?: (...args:any[]) => {};
+  onDestroy?: (...args:any[]) => {};
+}
+
+class ncom {
   #cross?: any;
   #closer?: any;
   #icon?: any;
@@ -39,7 +60,8 @@ export default class ncom {
   #detached?: any ;
   #timerInterval?: any;
 
-  constructor(public arg?: any) {
+   constructor(public arg: ncomArg) {
+
     if (typeof this.arg !== 'object') return this;
     this.arg.title = this.arg.title || '';
     this.arg.content = this.arg.content || '';
@@ -49,27 +71,27 @@ export default class ncom {
     this.#cross = this.#createSVG(
       ['16', '16', '0 0 16 16', 'button', 'ncomcross'],
       [
-        'M11.033,13.625l4.549-4.549a1.43,1.43,0,0,0,0-2.022L14.57,6.044a1.43,1.43,0,0,0-2.022,0L8,10.592,3.451,6.044a1.43,1.43,0,0,0-2.022,0L.419,7.055a1.43,1.43,0,0,0,0,2.022l4.549,4.549L.419,18.174a1.43,1.43,0,0,0,0,2.022L1.43,21.206a1.43,1.43,0,0,0,2.022,0L8,16.658l4.549,4.549a1.43,1.43,0,0,0,2.022,0L15.581,20.2a1.43,1.43,0,0,0,0-2.022Z',
-        'translate(0 -5.625)',
+        'M21.181,19.289,26.9,13.573A1.339,1.339,0,1,0,25,11.678l-5.715,5.716-5.715-5.716a1.339,1.339,0,1,0-1.894,1.894l5.715,5.716L11.679,25A1.339,1.339,0,0,0,13.573,26.9l5.715-5.716L25,26.9A1.339,1.339,0,0,0,26.9,25Z',
+        'translate(-11.285 -11.289)',
         'ncomcrosspath',
       ]
     );
-    this.#closer = jQuery('<div/>', {class: 'ncomcloser', html: this.#cross});
-    this.#icon = jQuery('<div/>', {
+    this.#closer = this.#query('div', {class: 'ncomcloser', html: this.#cross});
+    this.#icon = this.#query('div', {
       class: 'nicon',
-      html: jQuery('<i/>', {class: this.arg.icon || ''}),
+      html: this.#query('i', {class: this.arg.icon || ''}),
     });
 
-    this.#wrp = jQuery('<div/>', {class: 'ncomwrp'});
-    this.#bw = jQuery('<div/>', {class: 'ncombw'});
+    this.#wrp = this.#query('div', {class: 'ncomwrp'});
+    this.#bw = this.#query('div', {class: 'ncombw'});
 
-    this.#head = jQuery('<div/>', {class: 'ncomhead'});
-    this.#title = jQuery('<div/>', {class: 'ncomtitle', html: this.arg.title});
-    this.#content = jQuery('<div/>', {
+    this.#head = this.#query('div', {class: 'ncomhead'});
+    this.#title = this.#query('div', {class: 'ncomtitle', html: this.arg.title});
+    this.#content = this.#query('div', {
       class: 'ncomcontent',
       html: this.arg.content,
     });
-    this.#buttons = jQuery('<div/>', {class: 'ncombtns'});
+    this.#buttons = this.#query('div', {class: 'ncombtns'});
 
     this.#putContent();
 
@@ -79,18 +101,37 @@ export default class ncom {
     else this.open();
   }
 
+  #query(element: string, params: { class?: string; id?: string; html?: string | HTMLElement | Node | Object | any ;}): HTMLElement {
+    const el = document.createElement(element);
+    if(params.id) el.id = params.id;
+    if(params.class) el.className = params.class;
+    if(typeof params.html === 'string')
+      el.innerHTML = params.html;
+    else if(params.html) {
+     el.append(params.html[0]||params.html);
+    }
+
+    return el;
+  }
+
+  #el(element: string): any {
+    return document.querySelector(element);
+  }
+
   #createButtons(): any /**/ {
     let res: any;
     if (typeof this.arg.buttons !== 'object') return 0;
-    this.#buttons[0].innerHTML = '';
-    jQuery.each(this.arg.buttons, (a: string, b: any) => {
-      Object(this)[`$$${a}`] = jQuery('<button/>', {
+    this.#buttons.innerHTML = '';
+    Object.entries(this.arg.buttons).forEach( (value: [string,ncomButton]) => {
+      const a = value[0];
+      const b = value[1];
+      Object(this)[`$$${a}`] = this.#query('button', {
         id: a,
         class: b.class || '',
         html: b.text || a,
-      })
-        .appendTo(this.#buttons)
-        .on('click', (e: any) => {
+      });
+      this.#buttons.append(Object(this)[`$$${a}`]);
+      Object(this)[`$$${a}`].addEventListener('click', (e: any) => {
           e.preventDefault();
           if (typeof this.arg.onAction === 'function')
             this.arg.onAction.apply(this, [Object(this)[`$$${a}`]]);
@@ -99,7 +140,7 @@ export default class ncom {
           this.#stopTimer();
           if (typeof res === 'undefined' || res) this.close();
         });
-      if (typeof b.hide === 'boolean' && b.hide) Object(this)[`$$${a}`].hide();
+      if (typeof b.hide === 'boolean' && b.hide) Object(this)[`$$${a}`].style.display = 'none';
     });
   }
 
@@ -116,8 +157,12 @@ export default class ncom {
     else return 0;
   }
 
-  #startTimer(): any /**/ {
-    const opt = this.arg.timer.split('|');
+  /**
+   * start timer
+   * @returns {boolean | void}
+   */
+  #startTimer(): boolean | void {
+    const opt = String(this.arg.timer).split('|');
     if (opt.length !== 2) {
       console.error("Invalid. example 'close|10000'");
       return !1;
@@ -129,13 +174,13 @@ export default class ncom {
       return !1;
     }
     let seconds = Math.ceil(time / 1e3);
-    this.#$cd = jQuery(`<span>&nbsp(${seconds})</span>`).appendTo(
-      Object(this)[`$$${button_key}`]
-    );
+    this.#$cd = this.#query('span', { html: `&nbsp(${seconds})`});
+    Object(this)[`$$${button_key}`].append(this.#$cd);
+
     this.#timerInterval = setInterval(() => {
-      this.#$cd.html(`&nbsp;(${(seconds -= 1)})`);
+      this.#$cd.innerHTML = `&nbsp;(${(seconds -= 1)})` ;
       if (seconds <= 0) {
-        Object(this)[`$$${button_key}`].trigger('click');
+        Object(this)[`$$${button_key}`].dispatchEvent(new Event('click'));
         this.#stopTimer();
       }
     }, 1e3);
@@ -143,31 +188,35 @@ export default class ncom {
 
   #rgnrt(): void {
     this.#id = new Date().getTime();
-    this.#wrp.attr('id', `ncom-wrp-${this.#id}`);
-    this.#bw.attr('id', `ncom-bw-${this.#id}`);
+    this.#wrp.setAttribute('id', `ncom-wrp-${this.#id}`);
+    this.#bw.setAttribute('id', `ncom-bw-${this.#id}`);
   }
 
-  #putContent(): void /**/ {
-    this.#bw[0].innerHTML = '';
+  /**
+   * Build dialog content
+   */
+  #putContent(): void {
+    this.#bw.innerHTML = '';
     //head
-    this.#head.prependTo(this.#bw);
+    this.#bw.prepend(this.#head);
     //icon
-    if (typeof this.arg.icon !== 'undefined') this.#icon.prependTo(this.#head);
-    else this.#head.addClass('ncomhead-flend');
+    if (typeof this.arg.icon !== 'undefined') this.#head.prepend(this.#icon);
+    else this.#head.classList.add('ncomhead-flend');
     //closer icon
     if (this.#closerIcon())
-      this.#closer.appendTo(this.#head).on('click', (e: any) => {
+    this.#head.append(this.#closer);
+    this.#closer.addEventListener('click', (e: any) => {
         e.preventDefault();
         if (typeof this.arg.onAction === 'function')
           this.arg.onAction.apply(this, [this.#closer]);
         this.close();
       });
     //box title
-    this.#title.appendTo(this.#bw);
+    this.#bw.append(this.#title);
     //box content
-    this.#content.appendTo(this.#bw);
+    this.#bw.append(this.#content);
     //box buttons
-    this.#buttons.appendTo(this.#bw);
+    this.#bw.append(this.#buttons);
     this.#createButtons();
 
     Object(this).$$content = this.#content;
@@ -177,9 +226,9 @@ export default class ncom {
 
     this.#rgnrt();
 
-    this.#wrp.html(this.#bw);
+    this.#wrp.appendChild(this.#bw);
 
-    this.#wrp.css({'z-index': new Date().getTime()});
+    this.#wrp.style.zIndex = new Date().getTime();
 
     //check window innerSize
     this.domResized();
@@ -231,9 +280,9 @@ export default class ncom {
       res = this.arg.onClose.apply(this);
     if (typeof res !== 'undefined' && !res) return !0;
     this.#stopTimer();
-    this.#detached = this.#wrp.detach();
+    this.#detached = this.#wrp.remove();
     this.#state = 300;
-    jQuery('body').removeAttr('data-ncom-is-under');
+    this.#el('body').removeAttribute('data-ncom-is-under');
     return !0;
   }
 
@@ -241,15 +290,15 @@ export default class ncom {
     if (this.#state === 200) {
       console.warn('ncom was opened');
       return void 0;
-    } else if (this.#state === 300) this.#detached.appendTo('body');
-    else this.#wrp.appendTo('body');
+    } else if (this.#state === 300) this.#el('body').appendChild(this.#detached);
+    else this.#el('body').appendChild(this.#wrp);
 
     this.#state = 200;
 
     //trigger onOpen argument and #startTimer if is defined
     if (typeof this.arg.onOpen === 'function') this.arg.onOpen.apply(this);
     if (typeof this.arg.timer !== 'undefined') this.#startTimer.apply(this);
-    jQuery('body').attr('data-ncom-is-under', 'RDSTATE');
+    this.#el('body').setAttribute('data-ncom-is-under', 'RDSTATE');
 
     return !0;
   }
@@ -263,9 +312,9 @@ export default class ncom {
       return !1;
     }
   }
-  
+
   @resizeDecorator
   domResized():void{
-    this.#wrp[0].style.height=`${Object(window).innerHeight}px`;
+    this.#wrp.style.height=`${Object(window).innerHeight}px`;
   }
 }
