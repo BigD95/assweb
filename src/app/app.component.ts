@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   visitorName?:string;
 
   //check that page is auth.. from domain
-  readyToAccess:boolean=this.Data.hasOwnProperty('pageSupport') && this.Data.pageSupport==='your_domain';
+  readyToAccess:boolean=this.Data.hasOwnProperty('pageSupport');
 
   visibilitychange:string ="visibilitychange"||"msvisibilitychange"||"webkitvisibilitychange";
   hidden:string ="hidden"||"msHidden"||"webkitHidden";
@@ -151,30 +151,30 @@ export class AppComponent implements OnInit, AfterViewInit {
           const del=new ncom({
           title:this.JS_STRING.WTITLE,icon:this.JS_STRING.WICON,content:this.JS_STRING.WCONT,
           onOpen:function(){
-            const handling=()=>{
+            const handling=($this: any)=>{
               app.AwreqService.getCred().subscribe({
                 next:(e:any)=>{
                   if(e.hasOwnProperty("ee"))
                   {
-                   this.$$icon.html("");
-                   this.$$title.html(app.JS_STRING.WAIT_OUT_T);
-                   this.$$content.html(e.ee);
-                   this.$$exit_attempt.remove();
+                   $this.$$icon.html("");
+                   $this.$$title.html(app.JS_STRING.WAIT_OUT_T);
+                   $this.$$content.html(e.ee);
+                   $this.$$exit_attempt.remove();
                   }
                   else if(e.hasOwnProperty("a"))
                   {
-                   if(e.a===404) handling();
+                   if(e.a===404) handling($this);
                    else if (e.a===200) Object(window).location.reload();
                   }
                 },
                 error:()=>{
-                  this.$$icon.html("");
-                  this.$$title.html(app.JS_STRING.WAIT_OUT_T);
-                  this.$$content.html(app.JS_STRING.WAIT_ERROR);
+                  $this.$$icon.html("");
+                  $this.$$title.html(app.JS_STRING.WAIT_OUT_T);
+                  $this.$$content.html(app.JS_STRING.WAIT_ERROR);
                 }
               });
             }
-            handling();
+            handling(this);
           },
           buttons:{
             exit_attempt:{

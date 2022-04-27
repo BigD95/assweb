@@ -34,25 +34,27 @@ div[data-chatWrapr="container"]
 /*.ncom.js style*/
 .ncomwrp
 {
-  background:rgba(var(--us-black-rgb),.3);
+  background:rgba(var(--us-white-rgb),.9);
 }
 .ncomcrosspath
 {
- fill: rgba(var(--us-blue-rgb),.8);
+ fill: rgba(var(--us-dark-rgb),.8);
 }
 .ncombw
 {
  background:rgb(var(--us-ded-rgb));
  color:rgba(var(--us-dark-rgb),.8);
+ box-shadow: none;
 }
 .btn-accept, .btn-cancel
 {
- padding:5px 8px;
+ width: 100%;
+ padding:8px 16px;
  border-radius:5px;
  font-size: 16px;
  border:0;
  cursor:pointer;
- box-shadow:0 0 2px rgba(0,0,0,60%);
+ box-shadow: none;
 }
 .btn-accept{
  background-color:var(--us-blue-color);
